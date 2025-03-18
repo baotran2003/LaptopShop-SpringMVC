@@ -17,7 +17,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping("/")
+    @GetMapping("/")
     public String getHomePage(Model model) {
         List<User> userList = this.userService.getAllUserByEmail("temqt2003@gmail.com");
         System.out.println(userList);
@@ -25,14 +25,14 @@ public class UserController {
         return "redirect:/admin/user";
     }
 
-    @RequestMapping("/admin/user")
+    @GetMapping("/admin/user")
     public String getUserPage(Model model) {
         List<User> users = this.userService.getAllUsers();
         model.addAttribute("users", users);
         return "admin/user/table-user";
     }
 
-    @RequestMapping("/admin/user/{id}")
+    @GetMapping("/admin/user/{id}")
     public String getUserDetailPage(Model model, @PathVariable Long id) {
         User user = this.userService.getUserById(id);
         model.addAttribute("user", user);
@@ -40,20 +40,20 @@ public class UserController {
         return "admin/user/show";
     }
 
-    @RequestMapping("/admin/user/create")
+    @GetMapping("/admin/user/create")
     public String getCreateUserPage(Model model) {
         model.addAttribute("newUser", new User());
         return "admin/user/create";
     }
 
-    @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
+    @PostMapping(value = "/admin/user/create")
     public String createUserPage(@ModelAttribute User newUser) {
         System.out.println("Run here !" + newUser);
         this.userService.handleSaveUser(newUser);
         return "redirect:/admin/user";
     }
 
-    @RequestMapping("/admin/user/update/{id}")
+    @GetMapping("/admin/user/update/{id}")
     public String getUpdateUserPage(Model model, @PathVariable Long id) {
         User currentUser = this.userService.getUserById(id);
         model.addAttribute("newUser", currentUser);
@@ -63,13 +63,27 @@ public class UserController {
     @PostMapping("/admin/user/update")
     public String postUpdateUser(@ModelAttribute("newUser") User user) {
         User currentUser = this.userService.getUserById(user.getId());
-        if(currentUser != null) {
+        if (currentUser != null) {
             currentUser.setAddress(user.getAddress());
             currentUser.setFullName(user.getFullName());
             currentUser.setPhone(user.getPhone());
 
-            this.userService.handleSaveUser(user);
+            this.userService.handleSaveUser(currentUser);
         }
         return "redirect:/admin/user";
     }
+
+    @GetMapping("/admin/user/delete/{id}")
+    public String getDeleteUserPage(Model model, @PathVariable Long id) {
+        model.addAttribute("id", id);
+        model.addAttribute("newUser", new User());
+        return "admin/user/delete";
+    }
+
+    @PostMapping("/admin/user/delete")
+    public String postDeleteUser(@ModelAttribute("newUser") User user) {
+        this.userService.deleteAUser(user.getId());
+        return "redirect:/admin/user";
+    }
+
 }
