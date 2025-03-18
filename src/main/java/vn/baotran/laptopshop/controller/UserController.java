@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import vn.baotran.laptopshop.domain.User;
 import vn.baotran.laptopshop.service.UserService;
 
+import java.util.List;
+
 @Controller
 public class UserController {
     // DI: Dependency injection
@@ -19,19 +21,24 @@ public class UserController {
 
     @RequestMapping("/")
     public String getHomePage(Model model) {
-        String test = this.userService.handleHello();
-        model.addAttribute("eric", test);
+        List<User> userList = this.userService.getAllUserByEmail("temqt2003@gmail.com");
+        System.out.println(userList);
         model.addAttribute("baotran", "from controller with model");
         return "hello";
     }
 
     @RequestMapping("/admin/user")
     public String getUserPage(Model model) {
+        return "admin/user/table-user";
+    }
+
+    @RequestMapping("/admin/user/create")
+    public String getCreateUserPage(Model model) {
         model.addAttribute("newUser", new User());
         return "admin/user/create";
     }
 
-    @RequestMapping(value = "/admin/user/create1", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
     public String createUserPage(@ModelAttribute User newUser) {
         System.out.println("Run here !" + newUser);
         this.userService.handleSaveUser(newUser);
