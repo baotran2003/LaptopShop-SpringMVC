@@ -2,7 +2,10 @@ package vn.baotran.laptopshop.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import vn.baotran.laptopshop.domain.User;
 import vn.baotran.laptopshop.service.UserService;
 
 @Controller
@@ -24,6 +27,13 @@ public class UserController {
 
     @RequestMapping("/admin/user")
     public String getUserPage(Model model) {
-        return "/admin/user/create";
+        model.addAttribute("newUser", new User());
+        return "admin/user/create";
+    }
+
+    @RequestMapping(value = "/admin/user/create1", method = RequestMethod.POST)
+    public String createUserPage(@ModelAttribute User newUser) {
+        System.out.println("Run here !" + newUser);
+        return "hello";
     }
 }
