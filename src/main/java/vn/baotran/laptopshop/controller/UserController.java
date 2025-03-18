@@ -11,7 +11,7 @@ import vn.baotran.laptopshop.service.UserService;
 @Controller
 public class UserController {
     // DI: Dependency injection
-    private UserService userService;
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -34,6 +34,7 @@ public class UserController {
     @RequestMapping(value = "/admin/user/create1", method = RequestMethod.POST)
     public String createUserPage(@ModelAttribute User newUser) {
         System.out.println("Run here !" + newUser);
+        this.userService.handleSaveUser(newUser);
         return "hello";
     }
 }
