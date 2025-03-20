@@ -1,8 +1,12 @@
 package vn.baotran.laptopshop.domain;
 
+
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,6 +17,12 @@ public class User {
     private String address;
     private String phone;
     private String avatar;
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
+
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
 
     public Long getId() {
         return id;
@@ -70,6 +80,14 @@ public class User {
         this.avatar = avatar;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -80,6 +98,7 @@ public class User {
                 ", address='" + address + '\'' +
                 ", phone='" + phone + '\'' +
                 ", avatar='" + avatar + '\'' +
+                ", role=" + role +
                 '}';
     }
 }
