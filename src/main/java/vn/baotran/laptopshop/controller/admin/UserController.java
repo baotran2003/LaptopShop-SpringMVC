@@ -3,7 +3,9 @@ package vn.baotran.laptopshop.controller.admin;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import vn.baotran.laptopshop.domain.User;
+import vn.baotran.laptopshop.service.UploadService;
 import vn.baotran.laptopshop.service.UserService;
 
 import java.util.List;
@@ -12,9 +14,11 @@ import java.util.List;
 public class UserController {
     // DI: Dependency injection
     private final UserService userService;
+    private final UploadService uploadService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UploadService uploadService) {
         this.userService = userService;
+        this.uploadService = uploadService;
     }
 
     @GetMapping("/")
@@ -47,9 +51,10 @@ public class UserController {
     }
 
     @PostMapping(value = "/admin/user/create")
-    public String createUserPage(@ModelAttribute User newUser) {
-        System.out.println("Run here !" + newUser);
-        this.userService.handleSaveUser(newUser);
+    public String createUserPage(@ModelAttribute User newUser,
+                                 @RequestParam("fileName") MultipartFile file) {
+        String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
+//        this.userService.handleSaveUser(newUser);
         return "redirect:/admin/user";
     }
 
