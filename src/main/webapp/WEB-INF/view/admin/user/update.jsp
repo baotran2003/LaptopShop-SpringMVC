@@ -32,32 +32,53 @@
                             <h3>Update a User</h3>
                             <hr/>
                             <%--@elvariable id="newUser" type=""--%>
-                            <form:form method="post" action="/admin/user/create" modelAttribute="newUser">
-                                <div class="mb-3" style="display: none">
+                            <form:form method="post" action="/admin/user/update"
+                                       modelAttribute="newUser" class="row"
+                                       enctype="multipart/form-data">
+                                <div class="mb-3 col-12 col-md-6" style="display: none">
                                     <label class="form-label">Id</label>
                                     <form:input type="text" class="form-control" path="id" />
                                 </div>
-                                <div class="mb-3" style="display: none">
+                                <div class="mb-3 col-12 col-md-6" style="display: none">
                                     <label class="form-label">Password</label>
                                     <form:input type="password" class="form-control" path="password"/>
                                 </div>
-                                <div class="mb-3">
+                                <div class="mb-3 col-12 col-md-6">
                                     <label class="form-label">Email address</label>
-                                    <form:input type="email" class="form-control" path="email" readonly="true"/>
+                                    <form:input type="email" class="form-control" path="email"/>
                                 </div>
-                                <div class="mb-3">
+                                <div class="mb-3 col-12 col-md-6">
                                     <label class="form-label">Full Name</label>
                                     <form:input type="text" class="form-control" path="fullName"/>
                                 </div>
-                                <div class="mb-3">
+                                <div class="mb-3 col-12 col-md-6">
                                     <label class="form-label">Address</label>
                                     <form:input type="text" class="form-control" path="address"/>
                                 </div>
-                                <div class="mb-3">
+                                <div class="mb-3 col-12 col-md-6">
                                     <label class="form-label">Phone number</label>
                                     <form:input type="text" class="form-control" path="phone"/>
                                 </div>
-                                <button type="submit" class="btn btn-warning">Update</button>
+                                <div class="mb-3 col-12 col-md-6">
+                                    <label class="form-label">Role:</label>
+                                    <form:select class="form-select" path="role.name">
+                                        <form:option value="ADMIN">ADMIN</form:option>
+                                        <form:option value="USER">USER</form:option>
+                                    </form:select>
+                                </div>
+                                <div class="mb-3 col-12 col-md-6">
+                                    <label for="avatarFile" class="form-label">Avatar:</label>
+                                    <input class="form-control" type="file" id="avatarFile"
+                                           accept=".png, .jpg, .jpeg"
+                                           name="fileName"
+                                    />
+                                </div>
+                                <div class="mb-3 col-12 col-md-6">
+                                    <img id="avatarPreview" style="max-height: 150px; display: none" alt="avatar preview">
+                                </div>
+                                <div class="col-12 mb-5">
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                </div>
                             </form:form>
                         </div>
                     </div>
