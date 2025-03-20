@@ -24,14 +24,6 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @GetMapping("/")
-    public String getHomePage(Model model) {
-        List<User> userList = this.userService.getAllUserByEmail("temqt2003@gmail.com");
-        System.out.println(userList);
-        model.addAttribute("baotran", "from controller with model");
-        return "redirect:/admin/user";
-    }
-
     @GetMapping("/admin/user")
     public String getUserPage(Model model) {
         List<User> users = this.userService.getAllUsers();
