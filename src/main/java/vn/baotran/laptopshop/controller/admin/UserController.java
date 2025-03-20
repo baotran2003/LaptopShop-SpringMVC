@@ -1,5 +1,6 @@
 package vn.baotran.laptopshop.controller.admin;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +16,12 @@ public class UserController {
     // DI: Dependency injection
     private final UserService userService;
     private final UploadService uploadService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService, UploadService uploadService) {
+    public UserController(UserService userService, UploadService uploadService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.uploadService = uploadService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/")
@@ -54,7 +57,12 @@ public class UserController {
     public String createUserPage(@ModelAttribute User newUser,
                                  @RequestParam("fileName") MultipartFile file) {
         String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
-//        this.userService.handleSaveUser(newUser);
+        String hashPassword = this.passwordEncoder.encode(newUser.getPassword());
+
+        newUser.setAvatar(avatar);
+        newUser.setPassword(hashPassword);
+        newUser.setRole(this.userService.getRoleByName(newUser.getRole().getName()));
+        this.userService.handleSaveUser(newUser);
         return "redirect:/admin/user";
     }
 
