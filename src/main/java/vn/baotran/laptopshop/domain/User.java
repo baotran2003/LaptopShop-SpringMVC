@@ -1,6 +1,7 @@
 package vn.baotran.laptopshop.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.util.List;
@@ -12,16 +13,27 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotEmpty(message = "Email cannot be empty")
+    @Email(message = "Email is not valid", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
     private String email;
 
+
+    @NotNull
+    @Min(value = 3, message = "Password must have at least 2 characters")
     private String password;
 
+    @NotNull
+    @Min(value = 3, message = "Full name must have at least 2 characters")
     private String fullName;
 
+    @NotNull
     private String address;
 
+    @NotNull
     private String phone;
 
+    @NotNull
     private String avatar;
 
     @ManyToOne

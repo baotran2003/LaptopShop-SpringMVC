@@ -1,13 +1,11 @@
 package vn.baotran.laptopshop.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
 @Data
 @Table(name = "products")
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

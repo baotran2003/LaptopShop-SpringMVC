@@ -39,7 +39,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Name</th>
-                                    <th>Profile</th>
+                                    <th>Price</th>
                                     <th>Factory</th>
                                     <th>Action</th>
                                 </tr>
