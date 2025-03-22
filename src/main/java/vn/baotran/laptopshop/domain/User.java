@@ -14,10 +14,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "Email cannot be empty")
     @Email(message = "Email is not valid", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
     private String email;
-
 
     @NotNull
     @Min(value = 3, message = "Password must have at least 2 characters")
@@ -28,12 +26,13 @@ public class User {
     private String fullName;
 
     @NotNull
+    @NotEmpty(message = "Address cannot be empty")
     private String address;
 
     @NotNull
+    @NotEmpty(message = "Phone number cannot be empty")
     private String phone;
 
-    @NotNull
     private String avatar;
 
     @ManyToOne
