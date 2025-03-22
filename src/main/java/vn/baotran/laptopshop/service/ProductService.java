@@ -5,6 +5,8 @@ import vn.baotran.laptopshop.domain.Product;
 import vn.baotran.laptopshop.repository.ProductRepository;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
@@ -19,5 +21,13 @@ public class ProductService {
 
     public List<Product> fetchProducts() {
         return this.productRepository.findAll();
+    }
+
+    public Optional<Product> fetchProductById(Long id) {
+        return this.productRepository.findById(id);
+    }
+
+    public void deleteProduct(Long id) {
+        this.productRepository.deleteById(id);
     }
 }

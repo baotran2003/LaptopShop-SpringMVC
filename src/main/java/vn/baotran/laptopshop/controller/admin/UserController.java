@@ -81,7 +81,7 @@ public class UserController {
     }
 
     @PostMapping("/admin/user/update")
-    public String postUpdateUser(@ModelAttribute("newUser") User user, @RequestParam("fileName") MultipartFile file) {
+    public String postUpdateUser(@ModelAttribute("newUser") @Valid User user, @RequestParam("fileName") MultipartFile file) {
         User currentUser = this.userService.getUserById(user.getId());
         if (currentUser != null) {
             currentUser.setAddress(user.getAddress());

@@ -22,7 +22,7 @@ public class User {
     private String password;
 
     @NotNull
-    @Min(value = 3, message = "Full name must have at least 2 characters")
+    @Size(min = 3, message = "Full name must have at least 2 characters")
     private String fullName;
 
     @NotNull

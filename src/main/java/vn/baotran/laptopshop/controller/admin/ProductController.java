@@ -1,19 +1,19 @@
 package vn.baotran.laptopshop.controller.admin;
 
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import vn.baotran.laptopshop.domain.Product;
 import vn.baotran.laptopshop.service.ProductService;
 import vn.baotran.laptopshop.service.UploadService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class ProductController {
@@ -52,6 +52,70 @@ public class ProductController {
         product.setImage(image);
 
         this.productService.createProduct(product);
+        return "redirect:/admin/product";
+    }
+
+    @GetMapping("/admin/product/{id}")
+    public String getProductDetailPage(Model model, @PathVariable Long id) {
+        Product product = this.productService.fetchProductById(id).get();
+        model.addAttribute("product", product);
+        model.addAttribute("id", id);
+        return "admin/product/detail";
+    }
+
+    @GetMapping("/admin/product/update/{id}")
+    public String showUpdateProductPage(Model model, @PathVariable Long id) {
+        Optional<Product> product = this.productService.fetchProductById(id);
+        if (!product.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
+        }
+        model.addAttribute("newProduct", product.get());
+        return "admin/product/update";
+    }
+
+    @PostMapping("/admin/product/update")
+    public String handleUpdateProduct(@ModelAttribute("newProduct") @Valid Product product,
+                                      BindingResult newProductBindingResult,
+                                      @RequestParam("fileName") MultipartFile file) {
+        // validate
+        if (newProductBindingResult.hasErrors()) {
+            return "admin/product/update";
+        }
+
+        Product currentProduct = this.productService.fetchProductById(product.getId()).get();
+        if (currentProduct != null) {
+            // update new image
+            if (!file.isEmpty()) {
+                String img = this.uploadService.handleSaveUploadFile(file, "product");
+                currentProduct.setImage(img);
+            }
+
+            currentProduct.setName(product.getName());
+            currentProduct.setPrice(product.getPrice());
+            currentProduct.setQuantity(product.getQuantity());
+            currentProduct.setDetailDesc(product.getDetailDesc());
+            currentProduct.setShortDesc(product.getShortDesc());
+            currentProduct.setFactory(product.getFactory());
+            currentProduct.setTarget(product.getTarget());
+
+            // update data
+            this.productService.createProduct(currentProduct);
+        }
+
+        return "redirect:/admin/product";
+    }
+
+
+    @GetMapping("/admin/product/delete/{id}")
+    public String getDeleteProductPage(Model model, @PathVariable Long id) {
+        model.addAttribute("id", id);
+        model.addAttribute("newProduct", new Product());
+        return "admin/product/delete";
+    }
+
+    @PostMapping("/admin/product/delete")
+    public String postDeleteProduct(Model model, @ModelAttribute("newProduct") Product product) {
+        this.productService.deleteProduct(product.getId());
         return "redirect:/admin/product";
     }
 }
