@@ -3,6 +3,7 @@ package vn.baotran.laptopshop.service;
 import org.springframework.stereotype.Service;
 import vn.baotran.laptopshop.domain.Role;
 import vn.baotran.laptopshop.domain.User;
+import vn.baotran.laptopshop.domain.dto.RegisterDto;
 import vn.baotran.laptopshop.repository.RoleRepository;
 import vn.baotran.laptopshop.repository.UserRepository;
 
@@ -44,5 +45,13 @@ public class UserService {
 
     public Role getRoleByName(String rollName) {
         return this.roleRepository.findByName(rollName);
+    }
+
+    public User registerDtoToUser(RegisterDto registerDto) {
+        User user = new User();
+        user.setFullName(registerDto.getFirstName() + " " + registerDto.getLastName());
+        user.setEmail(registerDto.getEmail());
+        user.setPassword(registerDto.getPassword());
+        return user;
     }
 }

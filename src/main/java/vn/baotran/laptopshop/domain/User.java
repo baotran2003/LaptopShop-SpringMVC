@@ -17,20 +17,14 @@ public class User {
     @Email(message = "Email is not valid", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
     private String email;
 
-    @NotNull
-    @Min(value = 3, message = "Password must have at least 2 characters")
+    @Size(min = 3, message = "Password must have at least 3 characters")
     private String password;
 
-    @NotNull
-    @Size(min = 3, message = "Full name must have at least 2 characters")
+    @NotEmpty(message = "FullName cannot be empty")
     private String fullName;
 
-    @NotNull
-    @NotEmpty(message = "Address cannot be empty")
     private String address;
 
-    @NotNull
-    @NotEmpty(message = "Phone number cannot be empty")
     private String phone;
 
     private String avatar;
