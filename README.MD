@@ -8,7 +8,7 @@ LaptopShop is a web application built using the **Spring MVC** framework in Java
 - **Shopping Cart**: Add laptops to the cart, update quantities, and remove items.
 - **User Interface**: Simple and responsive design using JSP and Bootstrap.
 - **Database Integration**: Stores product and order data using MySQL.
-- **Basic Authentication**: Login and logout functionality for admin/users (if implemented).
+- **Basic Authentication**: Login and logout functionality for admin/users.
 
 ## Technologies Used
 - **Java**: Core programming language.
