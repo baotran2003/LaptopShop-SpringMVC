@@ -1,16 +1,32 @@
-# Java Spring Starter template
-Template này được sử dụng cho series Java Spring MVC (dự án laptopshop) của tác giả Hỏi Dân IT (Eric)
+# LaptopShop - SpringMVC Project
 
-## Về tác giả
-Mọi thông tin về Tác giả Hỏi Dân IT, các bạn có thể tìm kiếm tại đây:
+## Overview
+LaptopShop is a web application built using the **Spring MVC** framework in Java. It simulates an online laptop store, allowing users to browse products, manage a shopping cart, and perform basic e-commerce functionalities.
 
-Website chính thức: https://hoidanit.vn/
+## Features
+- **Product Management**: View a list of laptops with details such as name, price, and description.
+- **Shopping Cart**: Add laptops to the cart, update quantities, and remove items.
+- **User Interface**: Simple and responsive design using JSP and Bootstrap.
+- **Database Integration**: Stores product and order data using MySQL.
+- **Basic Authentication**: Login and logout functionality for admin/users (if implemented).
 
-Youtube “Hỏi Dân IT” : https://www.youtube.com/@hoidanit
+## Technologies Used
+- **Java**: Core programming language.
+- **Spring MVC**: Framework for building the web application.
+- **Hibernate**: ORM for database interaction.
+- **MySQL**: Database for storing product and user data.
+- **JSP**: Frontend views.
+- **Bootstrap**: Styling and responsive design.
+- **Maven**: Dependency management.
 
-Tiktok “Hỏi Dân IT” :  https://www.tiktok.com/@hoidanit
+## Prerequisites
+Before running the project, ensure you have the following installed:
+- Java Development Kit (JDK) 8 or higher
+- Apache Tomcat (or any compatible servlet container)
+- MySQL Server
+- Maven
 
-Fanpage “Hỏi Dân IT” : https://www.facebook.com/askITwithERIC/
-
-Udemy Hỏi Dân IT: https://www.udemy.com/user/eric-7039/
-
+## Setup Instructions
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/your-username/LaptopShop-SpringMVC.git
