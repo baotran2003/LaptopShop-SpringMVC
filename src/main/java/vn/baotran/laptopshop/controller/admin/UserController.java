@@ -53,13 +53,8 @@ public class UserController {
                                  @ModelAttribute("newUser") @Valid User newUser,
                                  BindingResult newUserBindingResult,
                                  @RequestParam("fileName") MultipartFile file) {
-        // validate
-        List<FieldError> errors = newUserBindingResult.getFieldErrors();
-        for (FieldError error : errors ) {
-            System.out.println (error.getField() + " - " + error.getDefaultMessage());
-        }
+
         if(newUserBindingResult.hasErrors()) {
-//            model.addAttribute("newUser", newUser);
             return "/admin/user/create";
         }
 

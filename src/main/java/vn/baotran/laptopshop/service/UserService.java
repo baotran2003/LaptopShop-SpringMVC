@@ -19,9 +19,6 @@ public class UserService {
         this.roleRepository = roleRepository;
     }
 
-    public String handleHello() {
-        return "Hello User Service.";
-    }
 
     public List<User> getAllUsers() {
         return this.userRepository.findAll();
@@ -53,5 +50,9 @@ public class UserService {
         user.setEmail(registerDto.getEmail());
         user.setPassword(registerDto.getPassword());
         return user;
+    }
+
+    public Boolean checkEmailExists(String email) {
+        return this.userRepository.existsByEmail(email);
     }
 }
