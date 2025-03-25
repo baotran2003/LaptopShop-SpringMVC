@@ -38,7 +38,7 @@
         </div>
         <div class="sb-sidenav-footer">
             <div class="small">Logged in as:</div>
-            Bao Tran
+            <c:out value="${pageContext.request.userPrincipal.name}"/>
         </div>
     </nav>
 </div>
