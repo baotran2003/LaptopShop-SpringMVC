@@ -21,7 +21,7 @@
             rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
           rel="stylesheet">
 
@@ -46,7 +46,7 @@
 </div>
 <!-- Spinner End -->
 
-<jsp:include page="../layout/header.jsp"/>
+<jsp:include page="../layout/header.jsp" />
 
 <!-- Cart Page Start -->
 <div class="container-fluid py-5">
@@ -98,7 +98,7 @@
                         </td>
                         <td>
                             <p class="mb-0 mt-4">
-                                <fmt:formatNumber type="number" value="${cartDetail.price}"/> đ
+                                <fmt:formatNumber type="number" value="${cartDetail.price}" /> đ
                             </p>
                         </td>
                         <td>
@@ -126,13 +126,13 @@
                         <td>
                             <p class="mb-0 mt-4" data-cart-detail-id="${cartDetail.id}">
                                 <fmt:formatNumber type="number"
-                                                  value="${cartDetail.price * cartDetail.quantity}"/> đ
+                                                  value="${cartDetail.price * cartDetail.quantity}" /> đ
                             </p>
                         </td>
                         <td>
                             <form method="post" action="/delete-cart-product/${cartDetail.id}">
                                 <input type="hidden" name="${_csrf.parameterName}"
-                                       value="${_csrf.token}"/>
+                                       value="${_csrf.token}" />
                                 <button class="btn btn-md rounded-circle bg-light border mt-4">
                                     <i class="fa fa-times text-danger"></i>
                                 </button>
@@ -155,7 +155,7 @@
                             <div class="d-flex justify-content-between mb-4">
                                 <h5 class="mb-0 me-4">Tạm tính:</h5>
                                 <p class="mb-0" data-cart-total-price="${totalPrice}">
-                                    <fmt:formatNumber type="number" value="${totalPrice}"/> đ
+                                    <fmt:formatNumber type="number" value="${totalPrice}" /> đ
                                 </p>
                             </div>
                             <div class="d-flex justify-content-between">
@@ -169,13 +169,13 @@
                                 class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
                             <h5 class="mb-0 ps-4 me-4">Tổng số tiền</h5>
                             <p class="mb-0 pe-4" data-cart-total-price="${totalPrice}">
-                                <fmt:formatNumber type="number" value="${totalPrice}"/> đ
+                                <fmt:formatNumber type="number" value="${totalPrice}" /> đ
                             </p>
                         </div>
-                            <%--@elvariable id="cart" type=""--%>
+                        <%--@elvariable id="cart" type=""--%>
                         <form:form action="/confirm-checkout" method="post" modelAttribute="cart">
                             <input type="hidden" name="${_csrf.parameterName}"
-                                   value="${_csrf.token}"/>
+                                   value="${_csrf.token}" />
                             <div style="display: none;">
                                 <c:forEach var="cartDetail" items="${cart.cartDetails}"
                                            varStatus="status">
@@ -184,20 +184,19 @@
                                             <label>Id:</label>
                                             <form:input class="form-control" type="text"
                                                         value="${cartDetail.id}"
-                                                        path="cartDetails[${status.index}].id"/>
+                                                        path="cartDetails[${status.index}].id" />
                                         </div>
                                         <div class="form-group">
                                             <label>Quantity:</label>
                                             <form:input class="form-control" type="text"
                                                         value="${cartDetail.quantity}"
-                                                        path="cartDetails[${status.index}].quantity"/>
+                                                        path="cartDetails[${status.index}].quantity" />
                                         </div>
                                     </div>
                                 </c:forEach>
                             </div>
                             <button
-                                    class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4">
-                                Xác
+                                    class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4">Xác
                                 nhận thanh toán
                             </button>
                         </form:form>
@@ -210,7 +209,7 @@
 <!-- Cart Page End -->
 
 
-<jsp:include page="../layout/footer.jsp"/>
+<jsp:include page="../layout/footer.jsp" />
 
 
 <!-- Back to Top -->

@@ -13,6 +13,7 @@ import vn.baotran.laptopshop.domain.Product;
 import vn.baotran.laptopshop.domain.User;
 import vn.baotran.laptopshop.service.ProductService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -44,12 +45,12 @@ public class ItemController {
     public String getCartPage(Model model, HttpServletRequest request) {
         User currentUser = new User();
         HttpSession session = request.getSession(false);
-        Long id = (Long) session.getAttribute("id");
+        Long id = (Long) session.getAttribute("id"); // Lấy ID của user từ session
         currentUser.setId(id);
 
         Cart cart = this.productService.fetchByUser(currentUser);
 
-        List<CartDetail> cartDetails = cart.getCartDetails();
+        List<CartDetail> cartDetails = cart == null ? new ArrayList<>() : cart.getCartDetails();
 
         double totalPrice = 0;
         for(CartDetail cd: cartDetails) {

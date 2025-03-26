@@ -1,6 +1,7 @@
 package vn.baotran.laptopshop.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Entity
@@ -11,8 +12,10 @@ public class CartDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private Integer quantity;
 
+    @NotNull
     private Double price;
 
     @ManyToOne
