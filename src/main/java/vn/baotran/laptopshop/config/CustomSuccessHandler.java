@@ -36,17 +36,18 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
     }
 
     protected void clearAuthenticationAttributes(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(false); // // Lấy session hiện tại (false: không tạo session mới nếu chưa có)
         if (session == null) {
             return;
         }
-        session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+        session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION); // // Xóa thuộc tính lưu trữ lỗi xác thực khỏi session
     }
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        // redirect client -> đâu
         String targetUrl = determineTargetUrl(authentication);
 
         if (response.isCommitted()) {

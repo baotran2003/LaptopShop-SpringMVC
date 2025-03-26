@@ -6,25 +6,28 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.session.security.web.authentication.SpringSessionRememberMeServices;
 import vn.baotran.laptopshop.service.CustomUserDetailsService;
 import vn.baotran.laptopshop.service.UserService;
 
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration {
+
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(); // Create PasswordEncoder use BCrypt để mã hóa mật khẩu
     }
 
     @Bean
     public UserDetailsService userDetailsService(UserService userService) {
-        return new CustomUserDetailsService(userService);
+        return new CustomUserDetailsService(userService); // create UserDetailsService , use UserService để lấy thông tin người dùng
     }
 
     @Bean
@@ -42,8 +45,17 @@ public class SecurityConfiguration {
 
     @Bean
     public AuthenticationSuccessHandler customSuccessHandler() {
-        return new CustomSuccessHandler();
+        return new CustomSuccessHandler(); //Tạo handler tùy chỉnh để xử lý action sau khi login tcong
     }
+
+    @Bean
+    public SpringSessionRememberMeServices rememberMeServices() {
+        SpringSessionRememberMeServices rememberMeServices = new SpringSessionRememberMeServices();
+        // optionally customize
+        rememberMeServices.setAlwaysRemember(true);
+        return rememberMeServices;
+    }
+
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -57,11 +69,25 @@ public class SecurityConfiguration {
                         .requestMatchers("/admin/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated())
+
+                .sessionManagement((sessionManagement) -> sessionManagement
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS) // always create session for each request
+                        .invalidSessionUrl("/logout?expired")
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(false)) // Nếu đã có 1 session, session cũ sẽ bị hủy khi đăng nhập new session
+
+                .logout(logout->logout
+                        .deleteCookies("JSESSIONID")
+                        .invalidateHttpSession(true))   // Hủy HTTP session current
+
+                .rememberMe(rememberme -> rememberme.rememberMeServices(rememberMeServices()))
+
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
                         .failureUrl("/login?error")
                         .successHandler(customSuccessHandler())
                         .permitAll())
+
                 .exceptionHandling(exceptional -> exceptional.accessDeniedPage("/access-deny"));
         return http.build();
     }
