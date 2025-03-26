@@ -172,6 +172,7 @@
                                 <fmt:formatNumber type="number" value="${totalPrice}"/> đ
                             </p>
                         </div>
+                            <%--@elvariable id="cart" type=""--%>
                         <form:form action="/confirm-checkout" method="post" modelAttribute="cart">
                             <input type="hidden" name="${_csrf.parameterName}"
                                    value="${_csrf.token}"/>
