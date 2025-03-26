@@ -114,4 +114,15 @@ public class ProductService {
             }
         }
     }
+
+    public void handleUpdateCartBeforeCheckout(List<CartDetail> cartDetails) {
+        for(CartDetail cartDetail: cartDetails) {
+            Optional<CartDetail> cartDetailOptional = this.cartDetailRepository.findById(cartDetail.getId()); // find cartDetail trong database theo ID
+            if(cartDetailOptional.isPresent()) {
+                CartDetail currentCartDetail = cartDetailOptional.get(); // Lấy object CartDetail từ database
+                currentCartDetail.setQuantity(cartDetail.getQuantity());
+                this.cartDetailRepository.save(currentCartDetail);
+            }
+        }
+    }
 }
