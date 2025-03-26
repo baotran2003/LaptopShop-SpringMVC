@@ -1,5 +1,6 @@
 package vn.baotran.laptopshop.service;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 import vn.baotran.laptopshop.domain.Cart;
 import vn.baotran.laptopshop.domain.CartDetail;
@@ -42,7 +43,7 @@ public class ProductService {
         this.productRepository.deleteById(id);
     }
 
-    public void handleAddProductToCart(String email, Long productId) {
+    public void handleAddProductToCart(String email, Long productId, HttpSession session) {
         User user = this.userService.getUserByEmail(email);
         if (user != null) {
             // check user co chua ?
@@ -51,24 +52,37 @@ public class ProductService {
                 // Create new Cart
                 Cart otherCart = new Cart();
                 otherCart.setUser(user);
-                otherCart.setSum(1);
+                otherCart.setSum(0);
 
                 cart = this.cartRepository.save(otherCart);
             }
 
-            // save cart_detail , find productId
+            // save cart_detail in DB , find productId
             Optional<Product> productOptional = this.productRepository.findById(productId);
             if (productOptional.isPresent()) {
                 Product product = productOptional.get();
-                CartDetail cartDetail = new CartDetail();
 
-                cartDetail.setCart(cart);
-                cartDetail.setProduct(product);
-                cartDetail.setPrice(product.getPrice());
-                cartDetail.setQuantity(1);
+                // check product đã từng add vào cart chưa ?
+                CartDetail oldDetail = this.cartDetailRepository.findByCartAndProduct(cart, product);
+                if (oldDetail == null) {
+                    CartDetail cartDetail = new CartDetail();
+                    cartDetail.setCart(cart);
+                    cartDetail.setProduct(product);
+                    cartDetail.setPrice(product.getPrice());
+                    cartDetail.setQuantity(1);
 
-                // save cart_detail
-                this.cartDetailRepository.save(cartDetail);
+                    // save cart_detail in DB
+                    this.cartDetailRepository.save(cartDetail);
+
+                    // update cart sum
+                    int currentSum = cart.getSum() + 1;
+                    cart.setSum(currentSum);
+                    this.cartRepository.save(cart);
+                    session.setAttribute("sum", currentSum); // save value new um vào session để sử dụng ở các trang khác
+                } else {
+                    oldDetail.setQuantity(oldDetail.getQuantity() + 1);
+                    this.cartDetailRepository.save(oldDetail);
+                }
             }
         }
     }
