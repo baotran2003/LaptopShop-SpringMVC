@@ -45,7 +45,7 @@ public class SecurityConfiguration {
 
     @Bean
     public AuthenticationSuccessHandler customSuccessHandler() {
-        return new CustomSuccessHandler(); //Tạo handler tùy chỉnh để xử lý action sau khi login tcong
+        return new CustomSuccessHandler();
     }
 
     @Bean
@@ -76,8 +76,8 @@ public class SecurityConfiguration {
                         .maximumSessions(1)
                         .maxSessionsPreventsLogin(false)) // Nếu đã có 1 session, session cũ sẽ bị hủy khi đăng nhập new session
 
-                .logout(logout->logout
-                        .deleteCookies("JSESSIONID")
+                .logout(logout -> logout
+                        .deleteCookies("JSESSIONID") // Delete cookie JSESSIONID khi LogOut
                         .invalidateHttpSession(true))   // Hủy HTTP session current
 
                 .rememberMe(rememberme -> rememberme.rememberMeServices(rememberMeServices()))
