@@ -15,7 +15,7 @@ public class Cart {
     private Long id;
 
     @Min(value = 0)
-    private Integer sum;
+    private Integer sum; // tổng số lượng sản phẩm trong giỏ hàng
 
     @OneToOne
     @JoinColumn(name = "user_id")

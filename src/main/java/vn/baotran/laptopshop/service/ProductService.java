@@ -129,13 +129,6 @@ public class ProductService {
     // save OrderDetail, clear cart after ordering, and update session.
     public void handlePlaceOrder(User user, HttpSession session,
                                  String receiverName, String receiverAddress, String receiverPhone) {
-        // Create order
-        Order order = new Order();
-        order.setUser(user);
-        order.setReceiverName(receiverName);
-        order.setReceiverAddress(receiverAddress);
-        order.setReceiverPhone(receiverPhone);
-        order = this.orderRepository.save(order);   // save order va lấy lại order với ID được sinh ra
 
         // Create OrderDetail
 
@@ -145,6 +138,23 @@ public class ProductService {
             List<CartDetail> cartDetails = cart.getCartDetails();
 
             if (cartDetails != null) {
+                // Create order
+                Order order = new Order();
+                order.setUser(user);
+                order.setReceiverName(receiverName);
+                order.setReceiverAddress(receiverAddress);
+                order.setReceiverPhone(receiverPhone);
+                order.setStatus("PENDING");
+
+                double sumPrice = 0;
+                for(CartDetail cartDetail: cartDetails) {
+                    sumPrice += cartDetail.getPrice();
+                }
+                order.setTotalPrice(sumPrice);
+
+                order = this.orderRepository.save(order);   // save order va lấy lại order với ID được sinh ra
+
+                // Create Order Detail
                 for (CartDetail cartDetail : cartDetails) {
                     OrderDetail orderDetail = new OrderDetail();
                     orderDetail.setOrder(order);
