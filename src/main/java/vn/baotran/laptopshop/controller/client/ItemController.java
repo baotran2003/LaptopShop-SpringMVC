@@ -10,6 +10,7 @@ import vn.baotran.laptopshop.domain.CartDetail;
 import vn.baotran.laptopshop.domain.Product;
 import vn.baotran.laptopshop.domain.User;
 import vn.baotran.laptopshop.service.ProductService;
+import vn.baotran.laptopshop.util.CartUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,24 +41,7 @@ public class ItemController {
 
     @GetMapping("/cart")
     public String getCartPage(Model model, HttpServletRequest request) {
-        User currentUser = new User();
-        HttpSession session = request.getSession(false);
-        Long id = (Long) session.getAttribute("id"); // Lấy ID của user từ session
-        currentUser.setId(id);
-
-        Cart cart = this.productService.fetchByUser(currentUser);
-
-        List<CartDetail> cartDetails = cart == null ? new ArrayList<>() : cart.getCartDetails();
-
-        double totalPrice = 0;
-        for (CartDetail cd : cartDetails) {
-            totalPrice += cd.getPrice() * cd.getQuantity();
-        }
-
-        model.addAttribute("cartDetails", cartDetails);
-        model.addAttribute("totalPrice", totalPrice);
-        model.addAttribute("cart", cart);
-
+        CartUtil.loadCartDetailsIntoModel(request, model, productService, true);
         return "client/cart/show";
     }
 
@@ -70,23 +54,7 @@ public class ItemController {
 
     @GetMapping("/checkout")
     public String getCheckOutPage(Model model, HttpServletRequest request) {
-        User currentUser = new User();
-        HttpSession session = request.getSession(false);
-        Long id = (Long) session.getAttribute("id");
-        currentUser.setId(id);
-
-        Cart cart = this.productService.fetchByUser(currentUser);
-
-        List<CartDetail> cartDetails = cart == null ? new ArrayList<>() : cart.getCartDetails();
-
-        double totalPrice = 0;
-        for (CartDetail cartDetail : cartDetails) {
-            totalPrice += cartDetail.getPrice() * cartDetail.getQuantity();
-        }
-
-        model.addAttribute("cartDetails", cartDetails);
-        model.addAttribute("totalPrice", totalPrice);
-
+        CartUtil.loadCartDetailsIntoModel(request, model, productService, false);
         return "client/cart/checkout";
     }
 
@@ -103,8 +71,14 @@ public class ItemController {
             @RequestParam("receiverName") String receiverName,
             @RequestParam("receiverAddress") String receiverAddress,
             @RequestParam("receiverPhone") String receiverPhone) {
+        User currentUser = CartUtil.getCurrentUserFromSession(request);
         HttpSession session = request.getSession(false);
+        this.productService.handlePlaceOrder(currentUser, session, receiverName, receiverAddress, receiverPhone);
+        return "redirect:/thanks";
+    }
 
-        return "redirect:/";
+    @GetMapping("/thanks")
+    public String getThankPage(Model model) {
+        return "client/cart/thanks";
     }
 }
