@@ -40,7 +40,7 @@ public class OrderController {
     @GetMapping("/admin/order/delete/{id}")
     public String getDeleteOrderPage(Model model, @PathVariable Long id) {
         model.addAttribute("id", id);
-        model.addAttribute("newOrder", new Order()); // // Add object Order rỗng vào model để binding dữ liệu từ form
+        model.addAttribute("newOrder", new Order()); // Add object Order rỗng vào model để binding dữ liệu từ form
         return "admin/order/delete";
     }
 
