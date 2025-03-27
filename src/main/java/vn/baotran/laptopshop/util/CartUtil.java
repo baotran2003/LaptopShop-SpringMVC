@@ -6,15 +6,15 @@ import org.springframework.ui.Model;
 import vn.baotran.laptopshop.domain.Cart;
 import vn.baotran.laptopshop.domain.CartDetail;
 import vn.baotran.laptopshop.domain.User;
-import vn.baotran.laptopshop.service.ProductService;
+import vn.baotran.laptopshop.service.CartService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CartUtil {
-    public static void loadCartDetailsIntoModel(HttpServletRequest request, Model model, ProductService productService, boolean includeCart) {
+    public static void loadCartDetailsIntoModel(HttpServletRequest request, Model model, CartService cartService, boolean includeCart) {
         User currentUser = getCurrentUserFromSession(request); // Lấy User từ session
-        Cart cart = productService.fetchByUser(currentUser); // Lấy giỏ hàng từ ProductService
+        Cart cart = cartService.fetchByUser(currentUser); // Lấy giỏ hàng từ ProductService
         List<CartDetail> cartDetails = (cart == null) ? new ArrayList<>() : cart.getCartDetails();
         double totalPrice = 0;
         for (CartDetail cartDetail : cartDetails) {
