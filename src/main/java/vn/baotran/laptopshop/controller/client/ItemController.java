@@ -41,7 +41,7 @@ public class ItemController {
     public String addProductToCart(@PathVariable Long id, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         String email = (String) session.getAttribute("email");
-        this.cartService.handleAddProductToCart(email, id, session);
+        this.cartService.handleAddProductToCart(email, id, session, 1);
         return "redirect:/";
     }
 
@@ -86,5 +86,15 @@ public class ItemController {
     @GetMapping("/thanks")
     public String getThankPage(Model model) {
         return "client/cart/thanks";
+    }
+
+    @PostMapping("/add-product-from-view-detail")
+    public String handleAddProductFromViewDetail(@RequestParam("id") Long id,
+                                                 @RequestParam("quantity") Integer quantity,
+                                                 HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        String email = (String) session.getAttribute("email");
+        this.cartService.handleAddProductToCart(email, id, session, quantity);
+        return "redirect:/product/" + id;
     }
 }

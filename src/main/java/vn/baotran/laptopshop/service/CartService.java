@@ -26,7 +26,7 @@ public class CartService {
         this.productRepository = productRepository;
         this.userService = userService;
     }
-    public void handleAddProductToCart(String email, Long productId, HttpSession session) {
+    public void handleAddProductToCart(String email, Long productId, HttpSession session, Integer quantity) {
         User user = this.userService.getUserByEmail(email);
         if (user != null) {
             // check user co chua ?
@@ -52,7 +52,7 @@ public class CartService {
                     cartDetail.setCart(cart);
                     cartDetail.setProduct(product);
                     cartDetail.setPrice(product.getPrice());
-                    cartDetail.setQuantity(1);
+                    cartDetail.setQuantity(quantity);
 
                     // save cart_detail in DB
                     this.cartDetailRepository.save(cartDetail);
@@ -63,7 +63,7 @@ public class CartService {
                     this.cartRepository.save(cart);
                     session.setAttribute("sum", currentSum); // save value new um vào session để sử dụng ở các trang khác
                 } else {
-                    oldDetail.setQuantity(oldDetail.getQuantity() + 1);
+                    oldDetail.setQuantity(oldDetail.getQuantity() + quantity);
                     this.cartDetailRepository.save(oldDetail);
                 }
             }

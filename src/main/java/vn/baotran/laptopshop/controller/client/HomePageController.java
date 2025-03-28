@@ -9,11 +9,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import vn.baotran.laptopshop.domain.Order;
 import vn.baotran.laptopshop.domain.Product;
 import vn.baotran.laptopshop.domain.User;
 import vn.baotran.laptopshop.domain.dto.RegisterDto;
+import vn.baotran.laptopshop.service.OrderService;
 import vn.baotran.laptopshop.service.ProductService;
 import vn.baotran.laptopshop.service.UserService;
+import vn.baotran.laptopshop.util.CartUtil;
 
 import java.util.List;
 
@@ -21,11 +24,13 @@ import java.util.List;
 public class HomePageController {
     private final ProductService productService;
     private final UserService userService;
+    private final OrderService orderService;
     private final PasswordEncoder passwordEncoder;
 
-    public HomePageController(ProductService productService, UserService userService, PasswordEncoder passwordEncoder) {
+    public HomePageController(ProductService productService, UserService userService, OrderService orderService, PasswordEncoder passwordEncoder) {
         this.productService = productService;
         this.userService = userService;
+        this.orderService = orderService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -70,5 +75,13 @@ public class HomePageController {
     @GetMapping("/access-deny")
     public String getDenyPage(Model model) {
         return "client/auth/deny";
+    }
+
+    @GetMapping("/order-history")
+    public String getOrderHistoryPage(Model model, HttpServletRequest request) {
+        User currentUser = CartUtil.getCurrentUserFromSession(request);
+        List<Order> orders = this.orderService.fetchOrderByUser(currentUser);
+        model.addAttribute("orders", orders);
+        return "client/cart/order_history";
     }
 }
