@@ -81,26 +81,7 @@ public class ProductController {
         if (newProductBindingResult.hasErrors()) {
             return "admin/product/update";
         }
-
-        Product currentProduct = this.productService.fetchProductById(product.getId()).get();
-        if (currentProduct != null) {
-            // update new image
-            if (!file.isEmpty()) {
-                String img = this.uploadService.handleSaveUploadFile(file, "product");
-                currentProduct.setImage(img);
-            }
-
-            currentProduct.setName(product.getName());
-            currentProduct.setPrice(product.getPrice());
-            currentProduct.setQuantity(product.getQuantity());
-            currentProduct.setDetailDesc(product.getDetailDesc());
-            currentProduct.setShortDesc(product.getShortDesc());
-            currentProduct.setFactory(product.getFactory());
-            currentProduct.setTarget(product.getTarget());
-
-            // update data
-            this.productService.createProduct(currentProduct);
-        }
+        this.productService.updateProduct(product, file);
 
         return "redirect:/admin/product";
     }
