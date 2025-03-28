@@ -17,13 +17,9 @@ import java.util.List;
 public class UserController {
     // DI: Dependency injection
     private final UserService userService;
-    private final UploadService uploadService;
-    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService, UploadService uploadService, PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.uploadService = uploadService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/admin/user")
@@ -52,17 +48,11 @@ public class UserController {
                                  BindingResult newUserBindingResult,
                                  @RequestParam("fileName") MultipartFile file) {
 
-        if(newUserBindingResult.hasErrors()) {
+        if (newUserBindingResult.hasErrors()) {
             return "/admin/user/create";
         }
 
-        String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
-        String hashPassword = this.passwordEncoder.encode(newUser.getPassword());
-
-        newUser.setAvatar(avatar);
-        newUser.setPassword(hashPassword);
-        newUser.setRole(this.userService.getRoleByName(newUser.getRole().getName()));
-        this.userService.handleSaveUser(newUser);
+        this.userService.createUser(newUser, file);
         return "redirect:/admin/user";
     }
 
@@ -75,25 +65,7 @@ public class UserController {
 
     @PostMapping("/admin/user/update")
     public String postUpdateUser(@ModelAttribute("newUser") @Valid User user, @RequestParam("fileName") MultipartFile file) {
-        User currentUser = this.userService.getUserById(user.getId());
-        if (currentUser != null) {
-            currentUser.setAddress(user.getAddress());
-            currentUser.setFullName(user.getFullName());
-            currentUser.setPhone(user.getPhone());
-
-            // update avatar nếu có file mới
-            if (!file.isEmpty()) {
-                String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
-                currentUser.setAvatar(avatar);
-            }
-
-            // update role
-            String roleName = user.getRole().getName();
-            if (roleName.isEmpty()) {
-                currentUser.setRole(this.userService.getRoleByName(roleName));
-            }
-            this.userService.handleSaveUser(currentUser);
-        }
+        this.userService.updateUser(user, file);
         return "redirect:/admin/user";
     }
 

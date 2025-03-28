@@ -18,11 +18,9 @@ import java.util.Optional;
 @Controller
 public class ProductController {
     private final ProductService productService;
-    private final UploadService uploadService;
 
-    public ProductController(ProductService productService, UploadService uploadService) {
+    public ProductController(ProductService productService) {
         this.productService = productService;
-        this.uploadService = uploadService;
     }
 
     @GetMapping("/admin/product")
@@ -47,11 +45,7 @@ public class ProductController {
             return "admin/product/create";
         }
 
-        // upload image
-        String image = this.uploadService.handleSaveUploadFile(file, "product");
-        product.setImage(image);
-
-        this.productService.createProduct(product);
+        this.productService.createProduct(product, file);
         return "redirect:/admin/product";
     }
 

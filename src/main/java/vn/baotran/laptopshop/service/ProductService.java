@@ -21,7 +21,16 @@ public class ProductService {
         this.uploadService = uploadService;
     }
 
-    public Product createProduct(Product product) {
+    public Product createProduct(Product product, MultipartFile file) {
+        // Upload file và gán image nếu file không rỗng
+        if (file != null && !file.isEmpty()) {
+            String image = this.uploadService.handleSaveUploadFile(file, "product");
+            product.setImage(image);
+        } else {
+            throw new IllegalArgumentException("Product image is required");
+        }
+
+        // Lưu sản phẩm vào database
         return this.productRepository.save(product);
     }
 
