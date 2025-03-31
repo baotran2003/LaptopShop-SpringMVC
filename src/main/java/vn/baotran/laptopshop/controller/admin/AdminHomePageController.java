@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import vn.baotran.laptopshop.service.UserService;
 
 @Controller
-public class DashboardController {
+public class AdminHomePageController {
     private final UserService userService;
 
-    public DashboardController(UserService userService) {
+    public AdminHomePageController(UserService userService) {
         this.userService = userService;
     }
 

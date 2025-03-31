@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-public class OrderController {
+public class AdminOrderController {
     private final OrderService orderService;
 
-    public OrderController(OrderService orderService) {
+    public AdminOrderController(OrderService orderService) {
         this.orderService = orderService;
     }
 

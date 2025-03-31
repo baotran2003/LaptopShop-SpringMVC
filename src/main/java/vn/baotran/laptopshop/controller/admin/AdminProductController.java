@@ -18,10 +18,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-public class ProductController {
+public class AdminProductController {
     private final ProductService productService;
 
-    public ProductController(ProductService productService) {
+    public AdminProductController(ProductService productService) {
         this.productService = productService;
     }
 
