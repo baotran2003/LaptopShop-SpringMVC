@@ -1,6 +1,8 @@
 package vn.baotran.laptopshop.service;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vn.baotran.laptopshop.domain.*;
 import vn.baotran.laptopshop.repository.CartDetailRepository;
@@ -25,8 +27,8 @@ public class OrderService {
         this.cartDetailRepository = cartDetailRepository;
     }
 
-    public List<Order> fetchAllOrders() {
-        return this.orderRepository.findAll();
+    public Page<Order> fetchAllOrders(Pageable pageable) {
+        return this.orderRepository.findAll(pageable);
     }
 
     public Optional<Order> fetchOrderById(Long id) {

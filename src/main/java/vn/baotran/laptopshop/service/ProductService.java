@@ -1,11 +1,12 @@
 package vn.baotran.laptopshop.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import vn.baotran.laptopshop.domain.*;
 import vn.baotran.laptopshop.repository.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -60,8 +61,8 @@ public class ProductService {
         return this.productRepository.save(currentProduct);
     }
 
-    public List<Product> fetchProducts() {
-        return this.productRepository.findAll();
+    public Page<Product> fetchProducts(Pageable pageable) {
+        return this.productRepository.findAll(pageable);
     }
 
     public Optional<Product> fetchProductById(Long id) {

@@ -1,6 +1,9 @@
 package vn.baotran.laptopshop.controller.admin;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import vn.baotran.laptopshop.domain.Product;
 import vn.baotran.laptopshop.service.ProductService;
-import vn.baotran.laptopshop.service.UploadService;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,9 +26,23 @@ public class ProductController {
     }
 
     @GetMapping("/admin/product")
-    public String getProduct(Model model) {
-        List<Product> products = this.productService.fetchProducts();
+    public String getProduct(Model model, @RequestParam("page") Optional<String> pageOptional) {
+        int page = 1;
+        try {
+            if(pageOptional.isPresent()) {
+                // convert from String -> Int
+                page = Integer.parseInt(pageOptional.get());
+            }
+        } catch (Exception ignored) {
+            // page = 1
+        }
+        Pageable pageable = PageRequest.of(page - 1, 5);
+        Page<Product> productPage = this.productService.fetchProducts(pageable);
+        List<Product> products = productPage.getContent();
+
         model.addAttribute("products", products);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productPage.getTotalPages());
         return "admin/product/show";
     }
 

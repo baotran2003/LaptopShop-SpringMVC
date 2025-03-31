@@ -1,17 +1,19 @@
 package vn.baotran.laptopshop.controller.admin;
 
 import jakarta.validation.Valid;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import vn.baotran.laptopshop.domain.User;
-import vn.baotran.laptopshop.service.UploadService;
 import vn.baotran.laptopshop.service.UserService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -23,9 +25,22 @@ public class UserController {
     }
 
     @GetMapping("/admin/user")
-    public String getUserPage(Model model) {
-        List<User> users = this.userService.getAllUsers();
+    public String getUserPage(Model model, @RequestParam("page") Optional<String> pageOptional) {
+        int page = 1;
+        try {
+            if (pageOptional.isPresent()) {
+                page = Integer.parseInt(pageOptional.get());
+            }
+        } catch (Exception ignored) {
+
+        }
+        Pageable pageable = PageRequest.of(page - 1, 5);
+        Page<User> userPage = this.userService.getAllUsers(pageable);
+        List<User> users = userPage.getContent();
+
         model.addAttribute("users", users);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", userPage.getTotalPages());
         return "admin/user/show";
     }
 
