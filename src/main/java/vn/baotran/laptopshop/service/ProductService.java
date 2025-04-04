@@ -2,19 +2,21 @@ package vn.baotran.laptopshop.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import vn.baotran.laptopshop.domain.*;
+import vn.baotran.laptopshop.domain.dto.ProductCriteriaDto;
 import vn.baotran.laptopshop.repository.*;
+import vn.baotran.laptopshop.service.specification.ProductSpecificationBuilder;
+import vn.baotran.laptopshop.service.specification.ProductSpecs;
 
 import java.util.Optional;
 
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
-
     private final UploadService uploadService;
-
 
     public ProductService(ProductRepository productRepository, UploadService uploadService) {
         this.productRepository = productRepository;
@@ -63,6 +65,31 @@ public class ProductService {
 
     public Page<Product> fetchProducts(Pageable pageable) {
         return this.productRepository.findAll(pageable);
+    }
+
+
+    public Page<Product> fetchProductsWithSpec(Pageable page, ProductCriteriaDto productCriteriaDTO) {
+        if (productCriteriaDTO.getTarget() == null && productCriteriaDTO.getFactory() == null && productCriteriaDTO.getPrice() == null) {
+            return this.productRepository.findAll(page);
+        }
+
+        Specification<Product> combinedSpec = Specification.where(null);
+
+        if (productCriteriaDTO.getTarget() != null && productCriteriaDTO.getTarget().isPresent()) {
+            Specification<Product> currentSpecs = ProductSpecs.matchListTarget(productCriteriaDTO.getTarget().get());
+            combinedSpec = combinedSpec.and(currentSpecs);
+        }
+        if (productCriteriaDTO.getFactory() != null && productCriteriaDTO.getFactory().isPresent()) {
+            Specification<Product> currentSpecs = ProductSpecs.matchListFactory(productCriteriaDTO.getFactory().get());
+            combinedSpec = combinedSpec.and(currentSpecs);
+        }
+
+        if (productCriteriaDTO.getPrice() != null && productCriteriaDTO.getPrice().isPresent()) {
+            Specification<Product> currentSpecs = ProductSpecificationBuilder.buildPriceSpecification(productCriteriaDTO.getPrice().get());
+            combinedSpec = combinedSpec.and(currentSpecs);
+        }
+
+        return this.productRepository.findAll(combinedSpec, page);
     }
 
     public Optional<Product> fetchProductById(Long id) {
