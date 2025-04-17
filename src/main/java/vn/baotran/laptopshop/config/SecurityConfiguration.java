@@ -13,8 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.session.security.web.authentication.SpringSessionRememberMeServices;
-import vn.baotran.laptopshop.service.CustomUserDetailsService;
 import vn.baotran.laptopshop.service.UserService;
+import vn.baotran.laptopshop.service.impl.CustomUserDetailsServiceImpl;
 
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
@@ -27,7 +27,7 @@ public class SecurityConfiguration {
 
     @Bean
     public UserDetailsService userDetailsService(UserService userService) {
-        return new CustomUserDetailsService(userService); // create UserDetailsService , use UserService để lấy thông tin người dùng
+        return new CustomUserDetailsServiceImpl(userService); // create UserDetailsService , use UserService để lấy thông tin người dùng
     }
 
     @Bean
@@ -63,7 +63,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE).permitAll()
 
-                        .requestMatchers("/", "/login", "/product/**", "register",
+                        .requestMatchers("/", "/login", "/product/**", "register", "/products/**",
                                 "/client/**", "/css/**", "/js/**", "/images/**").permitAll()
 
                         .requestMatchers("/admin/**").hasRole("ADMIN")

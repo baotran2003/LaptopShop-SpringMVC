@@ -45,7 +45,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
         if (session == null) {
             return;
         }
-        session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION); // // Xóa thuộc tính lưu trữ lỗi xác thực khỏi session
+        session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION); // Xóa thuộc tính lưu trữ lỗi xác thực khỏi session
         // get email
         String email = authentication.getName();
         // query user

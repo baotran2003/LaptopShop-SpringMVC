@@ -4,13 +4,13 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.stereotype.Service;
 import vn.baotran.laptopshop.domain.dto.RegisterDto;
-import vn.baotran.laptopshop.service.UserService;
+import vn.baotran.laptopshop.service.impl.UserServiceImpl;
 
 @Service
 public class RegisterValidator implements ConstraintValidator<RegisterChecked, RegisterDto> {
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
-    public RegisterValidator(UserService userService) {
+    public RegisterValidator(UserServiceImpl userService) {
         this.userService = userService;
     }
 
